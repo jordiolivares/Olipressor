@@ -5,40 +5,41 @@ import os
 import sys
 import bz2
 
-im = Image.open(sys.argv[1]) # La imatge a comprimir donada en el terminal
+im = Image.open(sys.argv[1]) # The image file to compress
 
 #
-# Escrivim els valors del tamany de la imatge
+# We write the size of the image for later
 #
 
-imcomprimida = str(im.size[0])+'\n'+str(im.size[1])+'\n' # Escrivim el tamany de la imatge
+imcomprimida = str(im.size[0])+'\n'+str(im.size[1])+'\n'
 
 pixel = im.load()
-tamanyx = im.size[0]-1
+tamanyx = im.size[0]-1 # Why -1 ? Can't remember why.. let's remove it and try without...
+# Seems to work, let's see the decompressed image...  Oh god oh god oh god what have I done
 tamanyy = im.size[1]
-pixelsbuits = 0
-variable = 5  # Quant poden variar els pixels
+pixelsbuits = 0 # Counter of pixels that look-alike
+variable = 5  # Range of the look-alike pixels
 
 imcomprimida += str(variable) + '\n'
-# Comencem a llegir la imatge
+# Now we start reading the image
 
-for y in range(0,tamanyy): # Nem de linea en linea
+for y in range(0,tamanyy): # Let's go line by line
     for x in range(0,tamanyx):
-        if (x == 0): # Al ser el primer pixel, es grava com a referencia per despres
-            pixeldoc = str(pixel[x,y]) # Converteix la tupla a un string 
-            pixeldoc = pixeldoc.replace(",","") # Per treure les comes
+        if (x == 0): # As it's the first pixel, we mark it as reference and go to the next one
+            pixeldoc = str(pixel[x,y]) # Transforms the Tuple to a String 
+            pixeldoc = pixeldoc.replace(",","") # Remove the commas (Makes the compressed size exponentially smaller
             imcomprimida += pixeldoc
             important = x
-            continue # Continue fa que passi dels seguents passos i que continui amb el for com si no hi hagues res mes 
-        if (x == tamanyx-1): #  El -1 es necessari ja que range() dona un valor final de tamanyx-1 (498 en comptes de 499)
+            continue 
+        if (x == tamanyx-1): # range(1,x) gives a final value of x-1, so we go around it
             pixeldoc = str(pixel[x,y])
-            imcomprimida += ' '+str(pixelsbuits)+' ' # Escriu el nombre de pixels similars en el rang de la variable
+            imcomprimida += ' '+str(pixelsbuits)+' ' # We write the number of look-alike pixels
             pixeldoc = pixeldoc.replace(",","")
             imcomprimida += pixeldoc + '\n'
-            pixelsbuits = 0 # Reiniciem el comptador de pixels
+            pixelsbuits = 0 # Restart the counter
             continue
 #
-# Si et veus amb cor d'intentar entendre aquest if, que es l'algoritme en si, et provocaras un trauma cerebral
+# The algorithm that checks if a pixel looks-alike the first one in the range defined in "variable"
 #
         if (pixel[x,y][0] <= pixel[important,y][0]+variable) and (pixel[x,y][0] >= pixel[important,y][0]-variable) and\
 (pixel[x,y][1] <= pixel[important,y][1]+variable) and (pixel[x,y][1] >= pixel[important,y][1]-variable) and\
@@ -46,16 +47,16 @@ for y in range(0,tamanyy): # Nem de linea en linea
             pixelsbuits += 1
             continue
         else:
-            # Hem trobat un pixel que se surt del rang, L'HEM DE MARCAR DE REFERENCIA per als pixels subsequents
+            # Seems we got a pixel different than the others, we mark it as the new reference
             pixeldoc = str(pixel[x,y])
-            imcomprimida += ' ' + str(pixelsbuits) + ' ' # imprimim els pixels semblants a l'ultim
-            pixelsbuits = 0 # reiniciem contador
+            imcomprimida += ' ' + str(pixelsbuits) + ' ' # Print look-alike pixels
+            pixelsbuits = 0 # Restart counter
             pixeldoc = pixeldoc.replace(",","")
             imcomprimida += pixeldoc
             important = x
-            # i tornem a comencar
-# Ara agafem les dades i les comprimim amb el algoritme bzip2
-# per a fer una ULTRACOMPRESSIÓÓÓÓÓ!!!!
-comprimida = bz2.BZ2File('processada.oli','w')
+            # and here we go again
+# Now we grab all those Strings and compress them with bzip2
+# so we get an ULTRACOMPREEEEESSSSSEEEEEDDD IMAAAAAAAAGE!!!!
+comprimida = bz2.BZ2File('processada.oli','w') # Name of compressed image is 'processada.oli' by default
 comprimida.write(imcomprimida)
 comprimida.close()
