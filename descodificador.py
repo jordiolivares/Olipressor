@@ -39,17 +39,14 @@ for linea in range(4,(tamanyy+3)): # Sumem 3 per a no oblidar-nos les 4 ultimes 
     fila = fila.replace(" ",",") # Per a la funcio eval() substituim els espais per comes
     fila = fila.strip('\n')
     fila = eval(fila) # Convertim el string en una tupla
-    # pixelx = 0 # Posicio del pixel en l'eix de les X
     rgb = fila[0]
     aprocessar.append(rgb)
     for i in range(0,len(fila)):
         if (i%2 != 0): # Trobem el contador de pixels
             rgb = fila[(i-1)]
             pixels = fila[i]
-            # pixelx += 1
             aprocessar.append(rgb)
             for x in range(pixels,0,(-1)):
-                # pixelx +=1
                 # Crearem ara els pixels que falten
                 # Fem que sigui un nombre absolut per a evitar problemes amb els negatius
                 R = abs(random.randint((rgb[0]-variable),(rgb[0]+variable)))
@@ -57,14 +54,9 @@ for linea in range(4,(tamanyy+3)): # Sumem 3 per a no oblidar-nos les 4 ultimes 
                 B = abs(random.randint((rgb[2]-variable),(rgb[2]+variable)))
                 aleatori = (R,G,B)
                 aprocessar.append(aleatori)
-                # final.putpixel((pixelx,(linea-4)),aleatori)
-                # Sumem un punt al eix de les X
         if (i == (len(fila)-1)):
             rgb = fila[(len(fila)-1)]
-            # final.putpixel(((tamanyx-1),(linea-4)),rgb)
             aprocessar.append(rgb)
-            # print i
-    # print linea
 # Guardem la imatge en format PNG (Tranquils, es pot canviar)
 final.putdata(aprocessar)
 final.save("descomprimida.png", "PNG")
