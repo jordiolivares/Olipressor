@@ -5,12 +5,11 @@ import os
 import sys
 import bz2
 
-im = Image.open(sys.argv[1]) # La imatge a comprimir
+im = Image.open(sys.argv[1]) # La imatge a comprimir donada en el terminal
 
 #
 # Escrivim els valors del tamany de la imatge
 #
-
 
 imcomprimida = str(im.size[0])+'\n'+str(im.size[1])+'\n' # Escrivim el tamany de la imatge
 
@@ -56,7 +55,7 @@ for y in range(0,tamanyy): # Nem de linea en linea
             important = x
             # i tornem a comencar
 # Ara agafem les dades i les comprimim amb el algoritme bzip2
-
+# per a fer una ULTRACOMPRESSIÓÓÓÓÓ!!!!
 comprimida = bz2.BZ2File('processada.oli','w')
 comprimida.write(imcomprimida)
 comprimida.close()
