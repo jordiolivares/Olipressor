@@ -1,3 +1,6 @@
-Instruccions d'ús:
+Usage:
 
-python2 codificador.py <imatge>
+python2 codificador.py <image file>
+
+Requires:
+	- Python Imaging Library (PIL)
